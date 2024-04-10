@@ -44,6 +44,9 @@ describe("PinCode", () => {
 
   // Submits the form when the pin code is long enough.
   it("should submit the form when the pin code is long enough", async () => {
+    const mockResponse = { auth: "Failed" };
+    global.fetch = jest.fn().mockImplementation(() => mockResponse);
+
     render(<PinCode onSubmit={onSubmit} attemptCount={attemptCount} />);
 
     // Act
@@ -54,6 +57,7 @@ describe("PinCode", () => {
 
     // Assert
     expect(global.fetch).toHaveBeenCalled();
+    expect(global.fetch).toHaveReturnedWith(mockResponse);
   });
 
   // Displays an error message when the pin code is incorrect.

@@ -9,12 +9,12 @@ To get started with this project, follow these steps:
 npm install
 ```
 
-Start the development server:
-```
-npm run dev
-```
-
 Start the api server:
 ```
 npm run server
+```
+
+Start the development server:
+```
+npm run dev
 ```
