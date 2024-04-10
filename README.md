@@ -1,7 +1,20 @@
-# Tauri + React + Typescript
+# Project Name: Tauri PinCode Test
+This project is a frontend application built using React and TypeScript, integrated with the Tauri framework for creating desktop applications.
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+# Usage
 
-## Recommended IDE Setup
+To get started with this project, follow these steps:
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+```
+npm install
+```
+
+Start the development server:
+```
+npm run dev
+```
+
+Start the api server:
+```
+npm run server
+```
