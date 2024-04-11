@@ -16,49 +16,40 @@ function PinCode({ onSubmit, attemptCount }: PropTypes) {
   const [leftAttempts, setLeftAttemps] = useState(attemptCount);
   const [isLocked, setIsLocked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const checkPasscode = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("http://localhost:3001/api/auth", {
+        method: "POST",
+        body: JSON.stringify({ pin }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await res.json();
+
+      setLoading(false);
+      if (result.auth === "Authorized") {
+        onSubmit();
+      } else {
+        setHasError(true);
+        setLeftAttemps((prev) => prev - 1);
+        setPin("");
+        if (leftAttempts === 1) {
+          setIsLocked(true);
+        }
+      }
+    } catch (err) {
+      setPin("");
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
-    const checkPasscode = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch("http://localhost:3001/api/auth", {
-          method: "POST",
-          body: JSON.stringify({ pin }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const result = await res.json();
-
-        setLoading(false);
-        if (result.auth === "Authorized") {
-          onSubmit();
-        } else {
-          setHasError(true);
-          setLeftAttemps((prev) => prev - 1);
-          setPin("");
-          if (leftAttempts === 1) {
-            setIsLocked(true);
-          }
-        }
-      } catch (err) {
-        setPin("");
-        console.error(err);
-      }
-    };
-
     if (pin.length === attemptCount) {
       checkPasscode();
     }
-  }, [
-    attemptCount,
-    pin,
-    leftAttempts,
-    setIsLocked,
-    setPin,
-    setLeftAttemps,
-    onSubmit,
-  ]);
+  }, [attemptCount, pin]);
 
   const handleClick = (number: number) => {
     setPin((prev) => prev + number);

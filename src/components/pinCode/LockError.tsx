@@ -1,23 +1,14 @@
-import { useEffect, useState } from "react";
 import PinCodeError from "./PinCodeError";
+import useCountdown from "../../hooks/useCountdown";
 
 type PropTypes = {
   onUnlocked: () => void;
 };
 
+const LOCK_TIME = 30;
+
 function LockError({ onUnlocked }: PropTypes) {
-  const [time, setTime] = useState(30);
-
-  useEffect(() => {
-    if (time === 0) {
-      onUnlocked();
-    }
-    const interval = setInterval(() => {
-      setTime(time - 1);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [time, setTime, onUnlocked]);
+  const time = useCountdown(LOCK_TIME, onUnlocked);
 
   return (
     <PinCodeError

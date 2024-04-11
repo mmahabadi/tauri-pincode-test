@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
-import ReactDom from "react-dom";
 import io from "socket.io-client";
+import { ToastContainer, toast } from "react-toastify";
 
 import Button from "./components/Button";
 import Modal from "./components/Modal";
 import PinCode from "./components/pinCode/PinCode";
 import AuthorizedPanel from "./components/AuthorizedPanel";
-import Toaster from "./components/Toaster";
 
 const socket = io("http://localhost:3001");
 
 function App() {
   const [open, setOpen] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [hasFailer, setHasFailer] = useState("");
 
   useEffect(() => {
     function onConnect() {
@@ -25,7 +23,7 @@ function App() {
     }
 
     function systemFailerEvent(message: string) {
-      setHasFailer(message);
+      toast(message);
       console.log(message);
     }
 
@@ -50,21 +48,18 @@ function App() {
 
   return (
     <>
-      {ReactDom.createPortal(
-        <Toaster type="error" message={hasFailer} />,
-        document.getElementById("toaster")!
-      )}
-      <div className="h-full w-full flex justify-center items-center min-w-full min-h-full">
-        <div className="container mx-auto flex justify-center items-center">
+      <ToastContainer />
+      <main className="h-full w-full flex justify-center items-center min-w-full min-h-full">
+        <section className="container mx-auto flex justify-center items-center">
           <Button onClick={() => setOpen(true)} text="Abort procedure" />
-        </div>
+        </section>
         <Modal show={open} onClose={() => setOpen(false)}>
           {!isAuthorized && (
             <PinCode attemptCount={4} onSubmit={handleSubmit} />
           )}
           {isAuthorized && <AuthorizedPanel onLogout={logoutHandler} />}
         </Modal>
-      </div>
+      </main>
     </>
   );
 }
